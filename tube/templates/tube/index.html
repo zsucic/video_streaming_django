@@ -8,7 +8,7 @@
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-        <title>HyperTube - Main</title>
+        <title>2e Tube - Main</title>
         <style>
         *{
             text-decoration: none !important;
@@ -40,7 +40,7 @@
 
             <div class="navbar-brand">
                 <a href="/tube/">
-                    <h2>Hypertube</h2>
+                    <h2><strong>2e</strong> Tube</h2>
                 </a>
 
             </div>
@@ -79,9 +79,12 @@
                     <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 infinite-item">
                         <a href="/tube/watch/{{ video.id }}/">
                             <div class="video-testimonial-block">
-                                <div class="video-thumbnail">
-                                    <img src="/tube/thumb/thumb{{ video.file.name }}/" alt="" class="img-fluid" >
-                                </div>
+<!--                                <div class="video-thumbnail">-->
+<!--                                    <img src="/tube/thumb/thumb{{ video.file.name }}/" alt="" class="img-fluid" >-->
+<!--                                </div>-->
+                                        <video class="videoPlayer" width="320" height="240" controls>
+                                            <source src="/tube/file/{{ video.file.name }}">
+                                        </video>
                             </div>
                         </a>
                         <div class="video-testimonial-content">
@@ -92,9 +95,12 @@
                                 <a href="/user/profile/{{ video.author.id }}">{{ video.author }}</a>
                             </p>
                         </div>
+
                     </div>
                     {% endfor %}
+
                 </div>
+                <input type="button" onclick="playPause()" value="Play-Pause All">
             </div>
 
             <div class="row">
@@ -105,7 +111,36 @@
                 </div>
             </div>
         </div>
+        <script>
+            function playPause() {
+            var videoPlayers = document.getElementsByClassName('videoPlayer');
+              for (var i = 0; i < videoPlayers.length; i++) {
+                var videoPlayer = videoPlayers[i];
 
+                  if (videoPlayer.paused == false) {
+                    videoPlayer.pause();
+                    videoPlayer.firstChild.nodeValue = 'Play';
+                  } else {
+                    videoPlayer.play();
+                    videoPlayer.firstChild.nodeValue = 'Pause';
+                  }
+              }
+              }
+<!--            // Auto play, half volume.-->
+<!--            videoPlayer.play()-->
+<!--            videoPlayer.volume = 0.5;-->
+<!--        -->
+<!--            // Play / pause.-->
+<!--            videoPlayer.addEventListener('click', function () {-->
+<!--                if (videoPlayer.paused == false) {-->
+<!--                    videoPlayer.pause();-->
+<!--                    videoPlayer.firstChild.nodeValue = 'Play';-->
+<!--                } else {-->
+<!--                    videoPlayer.play();-->
+<!--                    videoPlayer.firstChild.nodeValue = 'Pause';-->
+<!--                }-->
+<!--            });-->
+</script>
         <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>

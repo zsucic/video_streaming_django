@@ -13,12 +13,13 @@ import re
 import os
 import ffmpeg
 import sys
+import traceback
 
 
 class Index(ListView):
     template_name = 'tube/index.html'
     form_class = SearchForm
-    paginate_by = 3
+    paginate_by = 10
     context_object_name = 'data'
     model = Video
 
@@ -50,35 +51,38 @@ class Upload(View):
                       )
 
     def post(self, request, *args, **kwargs):
-        form = UploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            try:
-                video_file = request.FILES['video']
-            except ValidationError:
-                return redirect('/tube/upload')
-            else:
-                title = request.POST['title']
-                description = request.POST['description']
-                tags_arr = request.POST['tags'].split()
-                tags = []
-                for s in tags_arr:
-                    t = Tag()
-                    t.name = s
-                    t.save()
-                    tags.append(t)
+        try:
+            form = UploadForm(request.POST, request.FILES)
+            if form.is_valid():
+                try:
+                    video_file = request.FILES['video']
+                except ValidationError:
+                    return redirect('/tube/upload')
+                else:
+                    title = request.POST['title']
+                    description = request.POST['description']
+                    tags_arr = request.POST['tags'].split()
+                    tags = []
+                    for s in tags_arr:
+                        t = Tag()
+                        t.name = s
+                        t.save()
+                        tags.append(t)
 
-                video_model = Video()
-                video_model.title = title
-                video_model.file = video_file
-                video_model.description = description
-                video_model.author = request.user
-                video_model.save()
-                for t in tags:
-                    video_tag = VideoTag()
-                    video_tag.tag = t
-                    video_tag.video = video_model
-                    video_tag.save()
-                generate_thumbnail(video_file, video_model)
+                    video_model = Video()
+                    video_model.title = title
+                    video_model.file = video_file
+                    video_model.description = description
+                    video_model.author = request.user
+                    video_model.save()
+                    for t in tags:
+                        video_tag = VideoTag()
+                        video_tag.tag = t
+                        video_tag.video = video_model
+                        video_tag.save()
+                    generate_thumbnail(video_file, video_model)
+        except Exception as e:
+            print(traceback.format_exc())
         return redirect('/tube/')
 
 
@@ -166,7 +170,7 @@ def generate_thumbnail(in_filename, video_model):
     path = settings.MEDIA_ROOT + 'thumb' + file_name.replace('.mp4', '.png').replace(' ', '_')
     try:
         (
-            ffmpeg.input(settings.MEDIA_ROOT + in_filename.name, ss='00:00:05')
+            ffmpeg.input(settings.MEDIA_ROOT + file_name, ss='00:00:05')
                   .output(path, vframes=1)
                   .overwrite_output()
                   .run(capture_stdout=True, capture_stderr=True)
@@ -183,8 +187,12 @@ class DeleteVideoView(View):
         if video.author == request.user:
             name = video.file.name
             video.delete()
-            os.remove(settings.MEDIA_ROOT + name)
-            os.remove(settings.MEDIA_ROOT + 'thumb' + name.replace('.mp4', '.png'))
+            full_video_path=os.path.join(settings.MEDIA_ROOT, name)
+            full_thumb_path=os.path.join(settings.MEDIA_ROOT, 'thumb', name.replace('.mp4', '.png'))
+            if os.path.exists(full_video_path):
+                os.remove(full_video_path)
+            if os.path.exists(full_thumb_path):
+                os.remove(full_thumb_path)
             return redirect(f'/user/profile/{video.author.id}')
         return redirect('')
     

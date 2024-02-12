@@ -21,13 +21,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-with open(os.path.join(BASE_DIR, 'hypertube/SECRET_KEY.txt')) as f:
-    SECRET_KEY = f.read().strip()
-
+# with open(os.path.join(BASE_DIR, 'hypertube/SECRET_KEY.txt')) as f:
+#     SECRET_KEY = f.read().strip()
+SECRET_KEY = 'django-insecure-c(%tbsqv=wet4@5$nc$)^$v9!_0(v(@86g^tx35um-@e!ox@ka'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', 'andinocara.pythonnaywhere.com', 'ec2-3-89-152-95.compute-1.amazonaws.com']
+ALLOWED_HOSTS = ['localhost', 'zsucic.com']
 
 
 INSTALLED_APPS = [
@@ -77,17 +77,22 @@ WSGI_APPLICATION = 'hypertube.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'voce_cano',
+#         'USER': 'postgres',
+#         'PASSWORD': 'nderson@21',
+#         'HOST': '127.0.0.1',
+#         'PORT': '5432',
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'voce_cano',
-        'USER': 'postgres',
-        'PASSWORD': 'nderson@21',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'videodjango.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

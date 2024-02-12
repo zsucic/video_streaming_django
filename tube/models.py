@@ -12,7 +12,7 @@ class Tag(models.Model):
 
 class Video(models.Model):
     title = models.CharField(max_length=255)
-    description = models.CharField(max_length=1024)
+    description = models.CharField(max_length=1024, default='')
     file = models.FileField(validators=[FileExtensionValidator(allowed_extensions=EXTENSIONS)])
     upload_date = models.DateTimeField(default=now)
     views = models.IntegerField(default=0)
